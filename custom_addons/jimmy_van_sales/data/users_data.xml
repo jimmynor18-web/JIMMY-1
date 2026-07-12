@@ -26,6 +26,18 @@
             ]"/>
         </record>
 
+        <!-- Bodeguero: maneja bodega principal, produccion y compras.
+             Renombrar con el nombre real en Ajustes > Usuarios. -->
+        <record id="user_bodeguero" model="res.users">
+            <field name="name">Bodeguero</field>
+            <field name="login">bodega</field>
+            <field name="groups_id" eval="[
+                (4, ref('stock.group_stock_manager')),
+                (4, ref('mrp.group_mrp_manager')),
+                (4, ref('purchase.group_purchase_user')),
+            ]"/>
+        </record>
+
         <!-- Vendedor del Vehículo 3 -->
         <record id="user_andres_gutierrez" model="res.users">
             <field name="name">Andres Gutierrez</field>
