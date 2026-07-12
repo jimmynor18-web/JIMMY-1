@@ -37,7 +37,7 @@
         </record>
 
         <record id="journal_efectivo_veh3" model="account.journal">
-            <field name="name">Efectivo Vehículo 3</field>
+            <field name="name">Efectivo Andres Gutierrez</field>
             <field name="code">EFV3</field>
             <field name="type">cash</field>
         </record>

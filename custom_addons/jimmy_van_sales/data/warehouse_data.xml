@@ -15,7 +15,7 @@
         </record>
 
         <record id="warehouse_vehiculo_3" model="stock.warehouse">
-            <field name="name">Vehículo 3</field>
+            <field name="name">Camión Andres Gutierrez</field>
             <field name="code">VEH3</field>
             <field name="resupply_wh_ids" eval="[(4, ref('stock.warehouse0'))]"/>
         </record>
