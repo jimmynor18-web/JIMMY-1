@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_jimmy_task_list" model="ir.ui.view">
+        <field name="name">jimmy.task.list</field>
+        <field name="model">jimmy.task</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_overdue" decoration-muted="state == 'done'">
+                <field name="name"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="deadline"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'todo'"
+                       decoration-warning="state == 'in_progress'"
+                       decoration-success="state == 'done'"/>
+                <field name="is_overdue" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_jimmy_task_form" model="ir.ui.view">
+        <field name="name">jimmy.task.form</field>
+        <field name="model">jimmy.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start"
+                            class="btn-primary" invisible="state != 'todo'"/>
+                    <button name="action_done" type="object" string="Mark as Done"
+                            class="btn-primary" invisible="state != 'in_progress'"/>
+                    <button name="action_reset" type="object" string="Reset"
+                            invisible="state == 'todo'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="todo,in_progress,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="deadline"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Describe the task..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_jimmy_task_search" model="ir.ui.view">
+        <field name="name">jimmy.task.search</field>
+        <field name="model">jimmy.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+                <filter name="filter_my_tasks" string="My Tasks"
+                        domain="[('user_id', '=', uid)]"/>
+                <filter name="filter_open" string="Open"
+                        domain="[('state', '!=', 'done')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_by_user" string="Assigned to"
+                            context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_jimmy_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">jimmy.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first task
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_jimmy_tasks_root" name="Jimmy Tasks" sequence="10"/>
+    <menuitem id="menu_jimmy_tasks" name="Tasks"
+              parent="menu_jimmy_tasks_root"
+              action="action_jimmy_task" sequence="10"/>
+
+</odoo>
