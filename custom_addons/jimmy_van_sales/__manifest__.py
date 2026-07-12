@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Jimmy Van Sales",
-    "summary": "Crea 3 bodegas de vehiculo para venta en ruta",
+    "summary": "Bodegas por vehiculo, diarios de efectivo y plazos de pago para venta en ruta",
     "description": """
 Configura la venta en ruta (van sales):
-crea 3 almacenes (uno por vehiculo) con reabastecimiento
-desde el almacen principal. Renombra los vehiculos en
-Inventario > Configuracion > Almacenes.
+- 3 almacenes (uno por vehiculo) con reabastecimiento desde el almacen principal
+- 3 diarios de efectivo (uno por vehiculo) para cuadre de caja por vendedor
+- Plazos de pago: Contado y Credito 15 dias
+Renombra los vehiculos en Inventario > Configuracion > Almacenes.
 """,
     "author": "Jimmy",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "category": "Inventory",
     "license": "LGPL-3",
-    "depends": ["sale_management", "stock"],
+    "depends": ["sale_management", "stock", "account"],
     "data": [
         "data/warehouse_data.xml",
+        "data/account_data.xml",
     ],
     "installable": True,
     "application": False,
