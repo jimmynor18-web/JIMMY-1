@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="warehouse_vehiculo_1" model="stock.warehouse">
+            <field name="name">Vehículo 1</field>
+            <field name="code">VEH1</field>
+            <field name="resupply_wh_ids" eval="[(4, ref('stock.warehouse0'))]"/>
+        </record>
+
+        <record id="warehouse_vehiculo_2" model="stock.warehouse">
+            <field name="name">Vehículo 2</field>
+            <field name="code">VEH2</field>
+            <field name="resupply_wh_ids" eval="[(4, ref('stock.warehouse0'))]"/>
+        </record>
+
+        <record id="warehouse_vehiculo_3" model="stock.warehouse">
+            <field name="name">Vehículo 3</field>
+            <field name="code">VEH3</field>
+            <field name="resupply_wh_ids" eval="[(4, ref('stock.warehouse0'))]"/>
+        </record>
+
+    </data>
+</odoo>
