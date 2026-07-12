@@ -10,13 +10,14 @@ Configura la venta en ruta (van sales):
 Renombra los vehiculos en Inventario > Configuracion > Almacenes.
 """,
     "author": "Jimmy",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.2.0",
     "category": "Inventory",
     "license": "LGPL-3",
-    "depends": ["sale_management", "stock", "account"],
+    "depends": ["sale_management", "sale_stock", "stock", "account"],
     "data": [
         "data/warehouse_data.xml",
         "data/account_data.xml",
+        "data/users_data.xml",
     ],
     "installable": True,
     "application": False,

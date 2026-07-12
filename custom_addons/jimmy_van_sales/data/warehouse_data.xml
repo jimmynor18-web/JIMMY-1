@@ -3,7 +3,7 @@
     <data noupdate="1">
 
         <record id="warehouse_vehiculo_1" model="stock.warehouse">
-            <field name="name">Vehículo 1</field>
+            <field name="name">Camión Cesar Gomez</field>
             <field name="code">VEH1</field>
             <field name="resupply_wh_ids" eval="[(4, ref('stock.warehouse0'))]"/>
         </record>

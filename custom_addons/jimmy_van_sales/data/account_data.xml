@@ -25,7 +25,7 @@
 
         <!-- Diarios de efectivo, uno por vehiculo -->
         <record id="journal_efectivo_veh1" model="account.journal">
-            <field name="name">Efectivo Vehículo 1</field>
+            <field name="name">Efectivo Cesar Gomez</field>
             <field name="code">EFV1</field>
             <field name="type">cash</field>
         </record>
