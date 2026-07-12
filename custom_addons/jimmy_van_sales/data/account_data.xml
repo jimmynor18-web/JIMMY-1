@@ -31,7 +31,7 @@
         </record>
 
         <record id="journal_efectivo_veh2" model="account.journal">
-            <field name="name">Efectivo Vehículo 2</field>
+            <field name="name">Efectivo Luis Melo</field>
             <field name="code">EFV2</field>
             <field name="type">cash</field>
         </record>
