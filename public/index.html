@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Rutas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .contenedor { max-width: 720px; margin: 0 auto; }
+    h1 { margin-bottom: 0.25rem; }
+    .subtitulo { color: #4a5568; margin-bottom: 1.5rem; }
+    form, .tarjeta {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+    .campos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .campos .ancho-completo { grid-column: 1 / -1; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; }
+    input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    input:focus { outline: 2px solid #3182ce; border-color: transparent; }
+    button {
+      background: #3182ce;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: #2b6cb0; }
+    .ruta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .ruta h3 { margin-bottom: 0.25rem; }
+    .ruta .detalle { color: #4a5568; font-size: 0.9rem; }
+    .eliminar {
+      background: #e53e3e;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .eliminar:hover { background: #c53030; }
+    .vacio { text-align: center; color: #718096; padding: 2rem; }
+    .error { color: #c53030; font-size: 0.9rem; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1>🗺️ Gestor de Rutas</h1>
+    <p class="subtitulo">Crea y administra tus rutas de viaje</p>
+
+    <form id="formulario">
+      <div class="campos">
+        <div class="ancho-completo">
+          <label for="nombre">Nombre de la ruta</label>
+          <input id="nombre" name="nombre" placeholder="Ej: Ruta al trabajo" required>
+        </div>
+        <div>
+          <label for="origen">Origen</label>
+          <input id="origen" name="origen" placeholder="Ej: Bogotá" required>
+        </div>
+        <div>
+          <label for="destino">Destino</label>
+          <input id="destino" name="destino" placeholder="Ej: Medellín" required>
+        </div>
+        <div class="ancho-completo">
+          <label for="distanciaKm">Distancia (km, opcional)</label>
+          <input id="distanciaKm" name="distanciaKm" type="number" min="0" step="0.1" placeholder="Ej: 415">
+        </div>
+      </div>
+      <p class="error" id="error" hidden></p>
+      <button type="submit">Agregar ruta</button>
+    </form>
+
+    <div id="lista"></div>
+  </div>
+
+  <script>
+    const lista = document.getElementById('lista');
+    const formulario = document.getElementById('formulario');
+    const mensajeError = document.getElementById('error');
+
+    async function cargarRutas() {
+      const respuesta = await fetch('/api/rutas');
+      const rutas = await respuesta.json();
+      if (rutas.length === 0) {
+        lista.innerHTML = '<div class="tarjeta vacio">Aún no hay rutas. ¡Agrega la primera!</div>';
+        return;
+      }
+      lista.innerHTML = rutas.map(r => `
+        <div class="tarjeta ruta">
+          <div>
+            <h3>${escapar(r.nombre)}</h3>
+            <p class="detalle">
+              ${escapar(r.origen)} → ${escapar(r.destino)}
+              ${r.distanciaKm != null ? ` · ${r.distanciaKm} km` : ''}
+            </p>
+          </div>
+          <button class="eliminar" data-id="${r.id}">Eliminar</button>
+        </div>
+      `).join('');
+    }
+
+    function escapar(texto) {
+      const div = document.createElement('div');
+      div.textContent = texto;
+      return div.innerHTML;
+    }
+
+    formulario.addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      mensajeError.hidden = true;
+      const datos = {
+        nombre: formulario.nombre.value,
+        origen: formulario.origen.value,
+        destino: formulario.destino.value,
+      };
+      if (formulario.distanciaKm.value) {
+        datos.distanciaKm = Number(formulario.distanciaKm.value);
+      }
+      const respuesta = await fetch('/api/rutas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      if (!respuesta.ok) {
+        const { errores, error } = await respuesta.json();
+        mensajeError.textContent = (errores || [error]).join('. ');
+        mensajeError.hidden = false;
+        return;
+      }
+      formulario.reset();
+      cargarRutas();
+    });
+
+    lista.addEventListener('click', async (evento) => {
+      if (!evento.target.matches('.eliminar')) return;
+      await fetch('/api/rutas/' + evento.target.dataset.id, { method: 'DELETE' });
+      cargarRutas();
+    });
+
+    cargarRutas();
+  </script>
+</body>
+</html>
